@@ -13,6 +13,7 @@ public class SwordStrike : IAbility
     private float _cooldownTimer;
 
     public event Action Hitting;
+    public event Action LevelRaised;
 
     public SwordStrike(Transform transform, SwordStrikeStatsContainer statContainer, int level = Constants.Zero)
     {
@@ -29,6 +30,7 @@ public class SwordStrike : IAbility
     }
 
     public float Angle => _stats.Angle;
+    public float Radius => _stats.Radius;
 
     public void Update(float time)
     {
@@ -75,7 +77,15 @@ public class SwordStrike : IAbility
 
     public void LevelUp()
     {
-        _stats = _statContainer.GetStats(_stats.Level + Constants.One);
+        int nextLevel = _stats.Level + Constants.One;
+
+        if (nextLevel > _statContainer.MaxLevel)
+        {
+            throw new InvalidOperationException();
+        }
+
+        _stats = _statContainer.GetStats(nextLevel);
+        LevelRaised?.Invoke();
     }
 
 #if UNITY_EDITOR

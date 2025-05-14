@@ -9,6 +9,7 @@ public class Hero : MonoBehaviour
     [SerializeField][Min(Constants.Zero)] private float _invincibilityDuration = 0.6f;
     [SerializeField] private SwordStrikeStatsContainer _swordStrikeStatsContainer;
     [SerializeField] private ParticleSystem _swordSwingEffect;
+    [SerializeField] Renderer _renderer;
 
     private Health _health;
     private Mover _mover;
@@ -27,6 +28,7 @@ public class Hero : MonoBehaviour
     {
         //_swordStrikeStatsContainer.ThrowIfNull();
         //_swordSwingEffect.ThrowIfNull();
+        _renderer.ThrowIfNull();
     }
 
     private void Awake()
@@ -39,9 +41,14 @@ public class Hero : MonoBehaviour
         _mover = new(rigidbody);
         _rotator = new(rigidbody);
         _inputActions = new();
-        _animator = new(animator);
+        _animator = new(animator, _renderer.material);
+        _health.GetHit += _animator.VisualizeHit;
+
         _swordStrike = new(transform, _swordStrikeStatsContainer);
         _swordStrike.Hitting += PlayAttackAnimation;
+
+        ParticleSystem.ShapeModule a = _swordSwingEffect.shape;
+        a.radius = _swordStrike.Radius;
     }
 
     private void PlayAttackAnimation()
@@ -49,8 +56,6 @@ public class Hero : MonoBehaviour
         _animator.Play(HeroAnimation.Attack);
 
         VisualizeSwing();
-        ParticleSystem.ShapeModule a = _swordSwingEffect.shape;
-        a.radius = 5f;
     }
 
     private void VisualizeSwing()

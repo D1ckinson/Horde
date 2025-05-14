@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -14,6 +12,7 @@ public class Enemy : MonoBehaviour, IPollable
     private Mover _mover;
     private Health _health;
     private SpeedModifierHandler _speedModifierHandler;
+    private EntityAnimator<EnemyAnimation> _animator;
 
     public float Damage => _damage;
 
@@ -26,8 +25,10 @@ public class Enemy : MonoBehaviour, IPollable
     private void Awake()
     {
         _transform = transform;
+        _animator = new(GetComponent<MeshRenderer>().material);
         _health = new(100);
         _mover = new(GetComponent<Rigidbody>(), _moveSpeed);
+        _health.GetHit += _animator.VisualizeHit;
         _health.Died += Stop;//тест
         _speedModifierHandler = new(_mover);
     }

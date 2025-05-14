@@ -6,6 +6,8 @@ public class AbilityStatsContainer<T> : ScriptableObject where T : ScriptableObj
     [Header("Abilities")]
     [SerializeField] private T[] _swordStrikeStats;
 
+    public int MaxLevel => _swordStrikeStats.Length;
+
     private void OnValidate()
     {
         _swordStrikeStats.ThrowIfNull();

@@ -493,6 +493,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthValue: 100
   _invincibilityDuration: 0.6
+  _swordStrikeStatsContainer: {fileID: 0}
+  _swordSwingEffect: {fileID: 0}
+  _renderer: {fileID: 3918511026734163972}
 --- !u!1 &1646096533856214972
 GameObject:
   m_ObjectHideFlags: 0
